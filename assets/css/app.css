@@ -1,0 +1,76 @@
+body {
+  background-color: #16202C;
+}
+
+header {
+  text-align: center;
+  width: 30%;
+  position: fixed;
+  background-image: url("../imgs/sparks.jpeg");
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  z-index: 5;
+}
+
+#showCard {
+  z-index: 10;
+  position: fixed;
+  width: 70%;
+  height: 50%;
+  top: 30%;
+  left: 30%;
+  background-color: gray;
+  text-align: center;
+  border: 1em solid white;
+}
+
+#showCard p {
+  postion: relative:
+  top: 0;
+  left: 0;
+  width: 10%;
+  /*text-align: left;*/
+  font-size: 2rem;
+}
+
+#showCard p:hover {
+  cursor: pointer;
+}
+
+
+#showCard {
+  display: none;
+}
+
+ul {
+  width: 70%;
+  margin: 0 auto;
+  float: right;
+  text-align: center;
+}
+
+li {
+  display: inline-block;
+  padding: 2%;
+  margin: 2%;
+  background-color: #fff;
+  border-radius: 2%;
+}
+
+h3 {
+    font-size: 1rem;
+    overflow: hidden;
+}
+
+li:hover {
+    cursor: pointer;
+    background-color: #538ca3;
+}
+
+li:hover h3 {
+  color: white;
+}
+
+
+footer { display: inline-block; width: 30%; margin: 0 auto;}
