@@ -1,16 +1,18 @@
+$(function(){
+
 ////////////////////////////////////
 /////////////// MODEL /////////////
 ///////////////////////////////////
 
 var Card = Backbone.Model.extend({
-  defaults: {
-    category: "Personal";
-  },
+  // defaults: {
+  //   category: "Personal"
+  // }
 
-  validate: function(attrs){
-    if (!attrs.name)
-      return "Name is required.";
-  }
+  // validate: function(attrs){
+  //   if (!attrs.name)
+  //     return "Name is required.";
+  // }
 });
 
 
@@ -20,12 +22,12 @@ var Card = Backbone.Model.extend({
 
 // Will hold objects of the Service model
 var CardList = Backbone.Collection.extend({
-  model: Card,
+  model: Card
 
   // Return an array with only personal contacts
-  getPersonal: function(){
-    return this.where({category: "personal"});
-  }
+  // getPersonal: function(){
+  //   return this.where({category: "personal"});
+  // }
 });
 
 // Prefill the collection with cards.
@@ -79,66 +81,74 @@ var CardView = Backbone.view.extend({
     this.listenTo(this.model, 'change', this.render);
   },
 
-render: function(){
+  render: function(){
 
   // Create the HTML
 
-  this.$el.html('<input type="checkbox" value="1" name="' + this.model.get('title') + '" /> ' + this.model.get('title') + '<span>$' + this.model.get('price') + '</span>');
-  this.$('input').prop('checked', this.model.get('checked'));
+    this.$el.html('<input type="checkbox" value="1" name="' + this.model.get('title') + '" /> ' + this.model.get('title') + '<span>$' + this.model.get('price') + '</span>');
+    this.$('input').prop('checked', this.model.get('checked'));
 
-  // Returning the object is a good practice
-  // that makes chaining possible
-  return this;
-},
-})
+    // Returning the object is a good practice
+    // that makes chaining possible
+    return this;
+  },
+
+  showCard: function(){
+
+  }
+});
 
 /////////////////////////////////////////////
 /////////////// CARD LIST VIEW ////////////
 /////////////////////////////////////////
+var App = Backbone.View.extend({
 
-var CardsView = Backbone.View.extend({
-    el: $('main'),
+  // Base the view on an existing element
+  el: $('#main'),
+
+  initialize: function(){
+
+    // Cache these selectors
+    this.total = $('#total span');
+    this.list = $('#services');
+
+    // Listen for the change event on the collection.
+    // This is equivalent to listening on every one of the
+    // service objects in the collection.
+    this.listenTo(services, 'change', this.render);
 
 
-		initialize: function(){
+    // Create views for every one of the services in the
+    // collection and add them to the page
 
-			// Cache these selectors
-			this.total = $('#total span');
-			this.list = $('#services');
+    services.each(function(service){
 
-			// Listen for the change event on the collection.
-			// This is equivalent to listening on every one of the
-			// service objects in the collection.
-			this.listenTo(services, 'change', this.render);
+      var view = new ServiceView({ model: service });
+      this.list.append(view.render().el);
 
-			// Create views for every one of the services in the
-			// collection and add them to the page
+    }, this);	// "this" is the context in the callback
+  },
 
-			services.each(function(service){
+  render: function(){
 
-				var view = new ServiceView({ model: service });
-				this.list.append(view.render().el);
+    // Calculate the total order amount by agregating
+    // the prices of only the checked elements
 
-			}, this);	// "this" is the context in the callback
-		},
+    var total = 0;
 
-		render: function(){
+    _.each(services.getChecked(), function(elem){
+      total += elem.get('price');
+    });
 
-			// Calculate the total order amount by agregating
-			// the prices of only the checked elements
+    // Update the total price
+    this.total.text('$'+total);
 
-			var total = 0;
+    return this;
 
-			_.each(services.getChecked(), function(elem){
-				total += elem.get('price');
-			});
+  }
 
-			// Update the total price
-			this.total.text('$'+total);
+});
 
-			return this;
-		}
-	});
+new App();
 
-	new App();
-})
+});

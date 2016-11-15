@@ -38,7 +38,7 @@ header {
   cursor: pointer;
 }
 
-
+/*Change value to block when name card is clicked - in Backbone app*/
 #showCard {
   display: none;
 }
